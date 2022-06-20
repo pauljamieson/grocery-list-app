@@ -7,5 +7,5 @@ App to keep track of grocery lists.
  - Add prices to estimate your costs before going to the store.
  - Add store areas to group items found close to each other.
 
-Back-end is node express and postgres.
+Back-end is node express with a postgres database.  
 Front-end is react using material ui to create a familiar ui.
