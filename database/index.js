@@ -1,3 +1,4 @@
+const { mode } = require("crypto-js");
 const { Pool } = require("pg");
 const { v4: uuidv4 } = require("uuid");
 
@@ -12,7 +13,10 @@ const __sqlQuery = async (sql, values) => {
     } catch (e) {
       if (e.severity === "ERROR" && e.code === "23505") {
         reject("DUPLICATE");
-      } else reject(e);
+      } else {
+        console.log(e);
+        reject(e);
+      }
     } finally {
       client.release();
     }
@@ -61,9 +65,15 @@ module.exports.createToken = async (userId) => {
     try {
       const resp = await __sqlQuery(sql, values);
       if (resp.rowCount !== 1) throw "Failed to create login token.";
-      resolve(tokenValue);
+      resolve(values);
     } catch (e) {
       reject(e);
     }
   });
 };
+
+module.exports.validateToken = async (username, token) => {
+  return new Promise(async(resolve, reject)=>{
+
+  })
+}
