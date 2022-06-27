@@ -66,6 +66,19 @@ module.exports.updatePassword = async (id, password) => {
   });
 };
 
+module.exports.updateEmail = async (id, email) => {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE users SET email=$1 WHERE _id=$2";
+    const values = [email, id];
+    try {
+      const resp = __sqlQuery(sql, values);
+      resolve(resp);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 // tokens table
 
 module.exports.createToken = async (userId) => {
