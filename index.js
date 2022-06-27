@@ -4,6 +4,7 @@ const cors = require("cors");
 const httpResp = require("./helpers/htttpResp");
 const signupRouter = require("./routes/signup");
 const loginRouter = require("./routes/login");
+const apiRouter = require("./routes/api");
 
 const port = process.env.PORT || 5000;
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 // API routes
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
+app.use("/api", apiRouter);
 
 // Respond with react
 app.get("*", (req, res) => {

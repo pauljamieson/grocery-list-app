@@ -53,6 +53,19 @@ module.exports.readUser = async (username) => {
   });
 };
 
+module.exports.updatePassword = async (id, password) => {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE users SET password=$1 WHERE _id=$2";
+    const values = [password, id];
+    try {
+      const resp = __sqlQuery(sql, values);
+      resolve(resp);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 // tokens table
 
 module.exports.createToken = async (userId) => {
@@ -73,7 +86,32 @@ module.exports.createToken = async (userId) => {
 };
 
 module.exports.validateToken = async (username, token) => {
-  return new Promise(async(resolve, reject)=>{
+  return new Promise(async (resolve, reject) => {
+    const sql =
+      "SELECT * FROM tokens WHERE user_id=$1 and value=$2 and user_id=(select _id FROM users WHERE username=$3)";
+    const values = [token[2], token[0], username];
+    try {
+      const resp = await __sqlQuery(sql, values);
+      if (resp.rowCount !== 1) throw "Failed to validate token.";
+      resolve(true);
+    } catch (e) {
+      console.error(e);
+      reject(false);
+    }
+  });
+};
 
-  })
-}
+module.exports.deleteToken = async (token) => {
+  return new Promise(async (resolve, reject) => {
+    const sql = "DELETE FROM tokens WHERE value=$1";
+    const values = [token];
+    try {
+      const resp = await __sqlQuery(sql, values);
+      if (resp.rowCount < 1) throw "Failed to delete login token.";
+      resolve(true);
+    } catch (e) {
+      console.error(e);
+      reject(false);
+    }
+  });
+};
