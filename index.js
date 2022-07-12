@@ -24,12 +24,8 @@ app.use((req, res, next) => {
 app.use("/api", apiRouter);
 
 // Respond with react
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "build/index.html"));
-});
-
-app.get("*", (req, res) => {
-  res.redirect("/");
 });
 
 app.listen(port, async () => {
