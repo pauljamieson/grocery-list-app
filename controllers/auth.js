@@ -25,7 +25,6 @@ module.exports.auth_loginUser = async (req, res) => {
 
 module.exports.auth_logoutUser = async (req, res) => {
   const routePath = rootPath.concat("/logout");
-  console.log(res.locals.token, "TOKEN");
   try {
     const result = await deleteToken(res.locals.token);
     res.json(htttpResp("success", "post", routePath));

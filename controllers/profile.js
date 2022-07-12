@@ -36,7 +36,6 @@ module.exports.profile_updateProfile = async (req, res) => {
     try {
       const user = (await readUser(res.locals.username)).rows[0];
       const result = await updateEmail(user._id, email);
-      console.log(result);
       res.json(htttpResp("success", "put", rootPath));
     } catch (error) {
       res.json(htttpResp("failure", "put", rootPath, { error }));

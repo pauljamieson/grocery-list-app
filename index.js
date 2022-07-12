@@ -1,28 +1,35 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const httpResp = require("./helpers/htttpResp");
-const signupRouter = require("./routes/signup");
-const loginRouter = require("./routes/login");
+const path = require("path");
 const apiRouter = require("./routes/api");
 
 const port = process.env.PORT || 5000;
 
 app.disable("x-powered-by");
 
+// Make react app build path available
+app.use(express.static(path.join(__dirname, "build")));
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+  console.log("Path:", req.path);
+  next();
+});
+
 // API routes
-app.use("/signup", signupRouter);
-app.use("/login", loginRouter);
 app.use("/api", apiRouter);
 
 // Respond with react
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
+});
+
 app.get("*", (req, res) => {
-  res.send(httpResp("success", "GET", "/", { test: "worked" }));
-  //res.sendFile(path.join(__dirname, "client/build/index.html"));
+  res.redirect("/");
 });
 
 app.listen(port, async () => {

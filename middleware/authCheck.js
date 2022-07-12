@@ -18,6 +18,7 @@ const authCheck = async (req, res, next) => {
         res.set("token", cipher);
         res.locals.token = token[0];
         res.locals.username = username;
+        res.locals.userId = token[2];
         next();
       } else throw new Error("Validation Failed");
     } catch (err) {
